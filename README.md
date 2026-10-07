@@ -46,7 +46,19 @@ npm run build
 
 ## Screenshots
 
-Add real runtime screenshots here after starting the application locally. No generated or mock screenshots are used.
+These are captured from the **running React + NestJS + PostgreSQL stack in GitHub Actions using Playwright**.
+
+### Login
+
+![ClientHub login](docs/screenshots/login.png)
+
+### Task workflow
+
+The second capture shows a real account creating a task and completing it.
+
+![ClientHub completed task](docs/screenshots/workspace-completed-task.png)
+
+The CI pipeline runs the frontend tests/build, starts the real TaskForge API with PostgreSQL, executes the browser flow, and stores the screenshots as an artifact.
 
 ## Why a separate React project?
 
