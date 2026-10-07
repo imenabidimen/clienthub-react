@@ -84,6 +84,9 @@ jobs:
           const email = `recruiter-${Date.now()}@example.com`;
           const password = 'RecruiterDemo123!';
 
+          await page.goto('http://127.0.0.1:5173', { waitUntil: 'networkidle' });
+          await page.getByRole('heading', { name: 'Welcome back' }).waitFor({ state: 'visible' });
+
           await page.getByRole('button', { name: 'Need an account?' }).click();
           await page.getByLabel('Email').fill(email);
           await page.getByLabel('Password').fill(password);
