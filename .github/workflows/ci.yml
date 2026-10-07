@@ -95,7 +95,8 @@ jobs:
           await page.screenshot({ path: 'docs/screenshots/workspace-task-created.png', fullPage: true });
 
           await page.getByRole('button', { name: 'Complete' }).click();
-          await page.getByText('Prepare client delivery checklist').waitFor({ state: 'visible' });
+          await page.getByRole('button', { name: 'Done' }).waitFor({ state: 'visible' });
+          await page.locator('.done').filter({ hasText: 'Prepare client delivery checklist' }).waitFor({ state: 'visible' });
           await page.screenshot({ path: 'docs/screenshots/workspace-completed-task.png', fullPage: true });
 
           await browser.close();
