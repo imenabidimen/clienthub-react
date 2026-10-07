@@ -100,7 +100,7 @@ jobs:
           await page.getByRole('button', { name: 'Create workspace' }).click();
           await page.getByRole('heading', { name: 'Good morning.' }).waitFor({ state: 'visible' });
 
-          await page.getByLabel('New task').fill('Review production handover');
+          await page.getByLabel('New deliverable').fill('Review production handover');
           await page.getByRole('button', { name: 'Add deliverable' }).click();
           await page.getByText('Review production handover').waitFor({ state: 'visible' });
           await page.screenshot({ path: 'docs/screenshots/03-deliverable-added.png', fullPage: true });
