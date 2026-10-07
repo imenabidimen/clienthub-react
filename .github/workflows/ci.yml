@@ -86,21 +86,25 @@ jobs:
 
           await page.goto('http://127.0.0.1:5173', { waitUntil: 'networkidle' });
           await page.getByRole('heading', { name: 'Welcome back' }).waitFor({ state: 'visible' });
+          await page.screenshot({ path: 'docs/screenshots/01-sign-in.png', fullPage: true });
 
-          await page.getByRole('button', { name: 'Need an account?' }).click();
-          await page.getByLabel('Email').fill(email);
-          await page.getByLabel('Password').fill(password);
-          await page.getByRole('button', { name: 'Create account' }).click();
+          await page.getByRole('button', { name: 'New to ClientHub? Create an account' }).click();
+          await page.getByPlaceholder('name@company.com').fill(email);
+          await page.getByPlaceholder('Minimum 8 characters').fill(password);
+          await page.screenshot({ path: 'docs/screenshots/02-sign-up.png', fullPage: true });
 
-          await page.getByLabel('New task').fill('Prepare client delivery checklist');
-          await page.getByRole('button', { name: 'Add' }).click();
-          await page.getByText('Prepare client delivery checklist').waitFor({ state: 'visible' });
-          await page.screenshot({ path: 'docs/screenshots/workspace-task-created.png', fullPage: true });
+          await page.getByRole('button', { name: 'Create workspace' }).click();
+          await page.getByRole('heading', { name: 'Good morning.' }).waitFor({ state: 'visible' });
 
-          await page.getByRole('button', { name: 'Complete' }).click();
-          await page.getByRole('button', { name: 'Done' }).waitFor({ state: 'visible' });
-          await page.locator('.done').filter({ hasText: 'Prepare client delivery checklist' }).waitFor({ state: 'visible' });
-          await page.screenshot({ path: 'docs/screenshots/workspace-completed-task.png', fullPage: true });
+          await page.getByLabel('New task').fill('Review production handover');
+          await page.getByRole('button', { name: 'Add deliverable' }).click();
+          await page.getByText('Review production handover').waitFor({ state: 'visible' });
+          await page.screenshot({ path: 'docs/screenshots/03-deliverable-added.png', fullPage: true });
+
+          await page.getByRole('button', { name: 'Mark done' }).click();
+          await page.getByRole('button', { name: 'Completed' }).waitFor({ state: 'visible' });
+          await page.locator('.is-done').filter({ hasText: 'Review production handover' }).waitFor({ state: 'visible' });
+          await page.screenshot({ path: 'docs/screenshots/04-deliverable-completed.png', fullPage: true });
 
           await browser.close();
           EOF
