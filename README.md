@@ -48,13 +48,15 @@ npm run build
 
 These are captured from the **running React + NestJS + PostgreSQL stack in GitHub Actions using Playwright**.
 
-### Login
+### Task created
 
-![ClientHub login](docs/screenshots/login.png)
+A real account creates a task through the React UI and the NestJS API.
 
-### Task workflow
+![ClientHub task created](docs/screenshots/workspace-task-created.png)
 
-The second capture shows a real account creating a task and completing it.
+### Task completed
+
+The same task is then completed through the UI and persisted through the API.
 
 ![ClientHub completed task](docs/screenshots/workspace-completed-task.png)
 
