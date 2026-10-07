@@ -1,8 +1,34 @@
 name: CI
-on: [push,pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: write
+
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: taskforge
+          POSTGRES_USER: taskforge
+          POSTGRES_PASSWORD: taskforge
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U taskforge -d taskforge"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://taskforge:taskforge@localhost:5432/taskforge?schema=public
+      JWT_SECRET: ci-test-secret
+      CORS_ORIGIN: http://127.0.0.1:5173
+      PORT: 3000
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -11,3 +37,83 @@ jobs:
       - run: npm install
       - run: npm test
       - run: npm run build
+
+      - name: Build TaskForge API
+        working-directory: /tmp
+        run: |
+          git clone "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY_OWNER}/taskforge-api.git" taskforge-api
+          cd taskforge-api
+          npm install
+          npm run prisma:generate
+          npx prisma migrate deploy
+          npm run build
+
+      - name: Start TaskForge API
+        working-directory: /tmp/taskforge-api
+        run: |
+          nohup node dist/main.js > /tmp/taskforge-api.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:3000/docs >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/taskforge-api.log
+          exit 1
+
+      - name: Install Playwright
+        run: npm install -D playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Start ClientHub
+        run: |
+          nohup npm run dev -- --host 127.0.0.1 > /tmp/clienthub.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:5173 >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/clienthub.log
+          exit 1
+
+      - name: Capture real application screenshots
+        run: |
+          mkdir -p docs/screenshots
+          cat > capture.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch();
+          const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+          const email = `recruiter-${Date.now()}@example.com`;
+          const password = 'RecruiterDemo123!';
+
+          await page.goto('http://127.0.0.1:5173', { waitUntil: 'networkidle' });
+          await page.screenshot({ path: 'docs/screenshots/login.png', fullPage: true });
+
+          await page.getByRole('button', { name: 'Need an account?' }).click();
+          await page.getByLabel('Email').fill(email);
+          await page.getByLabel('Password').fill(password);
+          await page.getByRole('button', { name: 'Create account' }).click();
+
+          await page.getByLabel('New task').fill('Prepare client delivery checklist');
+          await page.getByRole('button', { name: 'Add' }).click();
+          await page.getByRole('button', { name: 'Complete' }).click();
+          await page.screenshot({ path: 'docs/screenshots/workspace-completed-task.png', fullPage: true });
+
+          await browser.close();
+          EOF
+          node capture.mjs
+
+      - name: Commit real screenshots
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/screenshots/*.png
+          git diff --cached --quiet || git commit -m "docs: add real app screenshots [skip ci]"
+          git push
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clienthub-real-screenshots
+          path: docs/screenshots/
+          retention-days: 30
