@@ -1,36 +1,53 @@
 # ClientHub
 
-A React + TypeScript workspace for keeping a small team's work organized. The project focuses on straightforward product behavior: sign in, see your work, add a task, finish it, and get out of the way.
-
-Stack: React 18, TypeScript, Vite, React Router, Vitest.
+A React + TypeScript workspace for keeping a small team's work organized. The UI consumes the **TaskForge NestJS API** and deliberately uses the same REST contract as the Vue WorkBoard client.
 
 ## What it demonstrates
 
-- Client-side authentication state
-- REST API integration with bearer tokens
-- Task loading and mutations
-- Logout/session clearing
-- Responsive UI states
-- CI with automated tests and a production build
+- React 18 + TypeScript + Vite
+- Authentication and registration flow
+- Bearer-token API integration
+- Task loading, creation, completion, and logout
+- Loading, empty, validation, and error states
+- Responsive UI
+- Vitest tests
+- GitHub Actions test/build verification
 
-## Why a separate React project?
+## Architecture
 
-WorkBoard uses Vue for the same backend contract. ClientHub deliberately implements the workflow in React so the portfolio shows that I can move between component models and state-management approaches without changing the API design.
+```
+React 18 / TypeScript
+        |
+        | REST + Bearer token
+        v
+TaskForge API (NestJS)
+        |
+        v
+PostgreSQL
+```
+
+The backend is intentionally shared with the other frontend client. This repository focuses on React implementation rather than creating a second copy of the API.
 
 ## Run locally
 
+```bash
 npm install
 npm run dev
+```
+
+Set `VITE_API_URL` when the API is not available at `http://localhost:3000/api`.
+
+Checks:
+
+```bash
 npm test
 npm run build
+```
 
-Set VITE_API_URL to point at another API instance.
+## Screenshots
 
-## API contract
+Add real runtime screenshots here after starting the application locally. No generated or mock screenshots are used.
 
-- POST /api/auth/login
-- GET /api/tasks
-- POST /api/tasks
-- POST /api/tasks/:id/complete
+## Why a separate React project?
 
-The UI is intentionally small. The value of this repository is in the clean API boundary and the interaction states, not in pretending a three-screen demo is a full CRM.
+WorkBoard demonstrates the Vue implementation of the same API contract. ClientHub demonstrates that I can move between React and Vue while keeping backend boundaries and behavior consistent.
