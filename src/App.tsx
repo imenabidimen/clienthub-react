@@ -23,6 +23,17 @@ export default function App() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    function handleAuthExpired() {
+      setAuthed(false);
+      setTasks([]);
+      setError('Your session expired. Please sign in again.');
+    }
+
+    window.addEventListener('auth-expired', handleAuthExpired);
+    return () => window.removeEventListener('auth-expired', handleAuthExpired);
+  }, []);
+
+  useEffect(() => {
     if (!authed) return;
 
     setLoading(true);
