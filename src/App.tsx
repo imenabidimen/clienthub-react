@@ -8,6 +8,7 @@ type Task = {
 };
 
 type AuthMode = 'login' | 'register';
+type TaskFilter = 'all' | 'open' | 'completed';
 
 export default function App() {
   const [authed, setAuthed] = useState(
