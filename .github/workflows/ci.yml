@@ -38,7 +38,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm ci
+      - run: npm install
       - run: npm test
       - run: npm run build
 
@@ -47,7 +47,7 @@ jobs:
         run: |
           git clone "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY_OWNER}/taskforge-api.git" taskforge-api
           cd taskforge-api
-          npm ci
+          npm install
           npm run prisma:generate
           npx prisma migrate deploy
           npm run build
