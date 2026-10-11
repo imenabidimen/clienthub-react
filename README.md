@@ -60,3 +60,9 @@ These are browser captures from the CI workflow, using a fresh test account agai
 ## Why this version uses React
 
 ClientHub and WorkBoard deliberately share the TaskForge API, but focus on different day-to-day interactions. ClientHub adds a searchable delivery list with status filters and a progress summary; WorkBoard is the simpler personal task workflow. The API remains the source of truth for task data.
+
+## Scope and trade-offs
+
+ClientHub is a deliverables-oriented view over the shared TaskForge task model. Search and status filters help narrow the list, while the progress summary gives a quick view of completion. It does **not** model clients, projects, or independent deliverable entities in the database, so I do not describe it as a full CRM.
+
+Sharing the API with WorkBoard makes the comparison useful: the same authentication and persistence contract is consumed by React here and Vue in WorkBoard. The trade-off is that the underlying domain remains deliberately simple; the React frontend is the main point of comparison.
