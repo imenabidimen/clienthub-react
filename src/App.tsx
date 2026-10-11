@@ -227,7 +227,7 @@ export default function App() {
           <span className="avatar">CH</span>
           <div>
             <b>Delivery workspace</b>
-            <small>Current project</small>
+            <small>Your deliverables</small>
           </div>
           <button onClick={logout}>Log out</button>
         </div>
@@ -235,9 +235,9 @@ export default function App() {
 
       <section className="welcome">
         <div>
-          <p className="kicker">CURRENT PROJECT · DELIVERY</p>
-          <h1>Good morning.</h1>
-          <p>Here is what needs attention across your deliverables.</p>
+          <p className="kicker">DELIVERABLES</p>
+          <h1>Your delivery checklist</h1>
+          <p>Track open work and keep completed items visible.</p>
         </div>
 
         <div className="progress">
@@ -271,7 +271,7 @@ export default function App() {
         <div className="section-head">
           <div>
             <p className="kicker">DELIVERABLES</p>
-            <h2>Project checklist</h2>
+            <h2>Deliverables</h2>
           </div>
           <span className="cycle">IN PROGRESS</span>
         </div>
@@ -300,7 +300,7 @@ export default function App() {
         {!loading && !error && tasks.length === 0 && (
           <div className="empty">
             <b>No deliverables yet</b>
-            <span>Add the first item to start the project checklist.</span>
+            <span>Add the first item to get started.</span>
           </div>
         )}
 
