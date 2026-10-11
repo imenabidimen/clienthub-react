@@ -98,7 +98,7 @@ jobs:
           await page.screenshot({ path: 'docs/screenshots/02-sign-up.png', fullPage: true });
 
           await page.getByRole('button', { name: 'Create workspace' }).click();
-          await page.getByRole('heading', { name: 'Good morning.' }).waitFor({ state: 'visible' });
+          await page.getByRole('heading', { name: 'Your delivery checklist' }).waitFor({ state: 'visible' });
 
           await page.getByLabel('New deliverable').fill('Review production handover');
           await page.getByRole('button', { name: 'Add deliverable' }).click();
