@@ -42,6 +42,33 @@ describe('ClientHub workspace', () => {
     expect(mockedApi).toHaveBeenCalledTimes(1);
   });
 
+  it('filters deliverables by status and title', async () => {
+    localStorage.setItem('accessToken', 'test-token');
+    mockedApi.mockResolvedValueOnce([
+      { id: 'task-1', title: 'Prepare release notes', completed: false },
+      { id: 'task-2', title: 'Send handover report', completed: true },
+    ]);
+
+    render(<App />);
+    expect(await screen.findByText('Prepare release notes')).toBeTruthy();
+    expect(screen.getByText('Send handover report')).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open (1)' }));
+    expect(screen.getByText('Prepare release notes')).toBeTruthy();
+    expect(screen.queryByText('Send handover report')).toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Completed (1)' }));
+    expect(screen.getByText('Send handover report')).toBeTruthy();
+    expect(screen.queryByText('Prepare release notes')).toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: 'All (2)' }));
+    fireEvent.change(screen.getByLabelText('Search deliverables'), {
+      target: { value: 'release' },
+    });
+    expect(screen.getByText('Prepare release notes')).toBeTruthy();
+    expect(screen.queryByText('Send handover report')).toBeNull();
+  });
+
   it('adds a deliverable returned by the API', async () => {
     const task = {
       id: 'task-1',

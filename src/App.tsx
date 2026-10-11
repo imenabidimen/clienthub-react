@@ -8,6 +8,7 @@ type Task = {
 };
 
 type AuthMode = 'login' | 'register';
+type TaskFilter = 'all' | 'open' | 'completed';
 
 export default function App() {
   const [authed, setAuthed] = useState(
@@ -18,6 +19,8 @@ export default function App() {
   const [password, setPassword] = useState('');
   const [tasks, setTasks] = useState<Task[]>([]);
   const [title, setTitle] = useState('');
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState<TaskFilter>('all');
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -124,6 +127,11 @@ export default function App() {
   const done = tasks.filter((task) => task.completed).length;
   const open = tasks.length - done;
   const progress = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
+  const visibleTasks = tasks.filter((task) => {
+    const matchesSearch = task.title.toLowerCase().includes(search.trim().toLowerCase());
+    const matchesFilter = filter === 'all' || (filter === 'open' ? !task.completed : task.completed);
+    return matchesSearch && matchesFilter;
+  });
 
   if (!authed) {
     return (
@@ -289,6 +297,23 @@ export default function App() {
           <button disabled={busy}>Add deliverable</button>
         </form>
 
+        <div className="deliverable-tools">
+          <label className="search-field">
+            <span>Find a deliverable</span>
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search by title"
+              aria-label="Search deliverables"
+            />
+          </label>
+          <div className="filter-group" aria-label="Filter deliverables">
+            <button type="button" aria-pressed={filter === 'all'} className={filter === 'all' ? 'filter-active' : ''} onClick={() => setFilter('all')}>All ({tasks.length})</button>
+            <button type="button" aria-pressed={filter === 'open'} className={filter === 'open' ? 'filter-active' : ''} onClick={() => setFilter('open')}>Open ({open})</button>
+            <button type="button" aria-pressed={filter === 'completed'} className={filter === 'completed' ? 'filter-active' : ''} onClick={() => setFilter('completed')}>Completed ({done})</button>
+          </div>
+        </div>
+
         {error && (
           <p className="error" role="alert">
             {error}
@@ -304,8 +329,15 @@ export default function App() {
           </div>
         )}
 
+        {!loading && !error && tasks.length > 0 && visibleTasks.length === 0 && (
+          <div className="empty" role="status">
+            <b>No matching deliverables</b>
+            <span>Try another search or choose a different status.</span>
+          </div>
+        )}
+
         <ul className="deliverables">
-          {tasks.map((task, index) => (
+          {visibleTasks.map((task, index) => (
             <li key={task.id} className={task.completed ? 'is-done' : ''}>
               <span className="index">
                 {String(index + 1).padStart(2, '0')}
