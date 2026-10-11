@@ -37,7 +37,7 @@ npm install
 npm run dev
 ```
 
-Set `VITE_API_URL` if the API uses a different base URL (include `/api`).
+If the API uses a different address, copy `.env.example` to `.env.local` and set `VITE_API_URL` to the API base URL (include `/api`). Vite reads `.env.local` when starting the dev server.
 
 ```bash
 npm test
