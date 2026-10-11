@@ -71,7 +71,15 @@ export default function App() {
   async function addTask(event: FormEvent) {
     event.preventDefault();
 
-    if (!title.trim()) return;
+    const cleanTitle = title.trim();
+    if (cleanTitle.length < 2) {
+      setError('Enter a deliverable with at least 2 characters.');
+      return;
+    }
+    if (cleanTitle.length > 120) {
+      setError('Keep deliverables to 120 characters or fewer.');
+      return;
+    }
 
     setBusy(true);
     setError('');
@@ -79,7 +87,7 @@ export default function App() {
     try {
       const task = await api('/tasks', {
         method: 'POST',
-        body: JSON.stringify({ title: title.trim() }),
+        body: JSON.stringify({ title: cleanTitle }),
       });
 
       setTasks((current) => [task, ...current]);
@@ -274,6 +282,8 @@ export default function App() {
             onChange={(event) => setTitle(event.target.value)}
             placeholder="Add a client deliverable…"
             aria-label="New deliverable"
+            minLength={2}
+            maxLength={120}
             required
           />
           <button disabled={busy}>Add deliverable</button>
@@ -287,7 +297,7 @@ export default function App() {
 
         {loading && <p className="muted">Loading workspace…</p>}
 
-        {!loading && tasks.length === 0 && (
+        {!loading && !error && tasks.length === 0 && (
           <div className="empty">
             <b>No deliverables yet</b>
             <span>Add the first item to start the project checklist.</span>
