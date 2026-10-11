@@ -1,5 +1,5 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import { api } from './api';
 
@@ -8,6 +8,8 @@ vi.mock('./api', () => ({ api: vi.fn() }));
 const mockedApi = vi.mocked(api);
 
 describe('ClientHub workspace', () => {
+  afterEach(() => cleanup());
+
   beforeEach(() => {
     localStorage.clear();
     mockedApi.mockReset();
