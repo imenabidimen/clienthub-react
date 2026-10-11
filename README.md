@@ -7,10 +7,6 @@
 Related work: [WorkBoard (Vue)](https://github.com/imenabidimen/workboard-vue) demonstrates the same API contract from a Vue perspective. ClientHub currently stores tasks, not independent client/project entities; the UI presents a deliverables workflow without claiming a full CRM data model.
 
 
-ClientHub is a React-based deliverables checklist. It presents tasks as items to track through a delivery cycle and uses TaskForge for sign-in and persistence.
-
-The current API stores tasks, not separate client or project records. The project labels in the interface are presentation context; they are not a multi-client/project management model.
-
 ## Stack
 
 - React 18 and TypeScript
