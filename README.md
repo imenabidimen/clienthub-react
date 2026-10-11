@@ -19,6 +19,7 @@ Related work: [WorkBoard (Vue)](https://github.com/imenabidimen/workboard-vue) d
 - Account creation and sign-in
 - Authenticated workspace
 - Add and complete deliverables
+- Search by title and filter by open/completed status
 - Completion percentage and open/completed counts
 - Loading, empty and error states
 - Responsive layout
@@ -58,4 +59,4 @@ These are browser captures from the CI workflow, using a fresh test account agai
 
 ## Why this version uses React
 
-ClientHub uses the same small task API as WorkBoard but presents a different workflow and visual layout. This keeps the backend contract shared while the two frontends can be compared side by side.
+ClientHub and WorkBoard deliberately share the TaskForge API, but focus on different day-to-day interactions. ClientHub adds a searchable delivery list with status filters and a progress summary; WorkBoard is the simpler personal task workflow. The API remains the source of truth for task data.
