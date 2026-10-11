@@ -47,7 +47,7 @@ jobs:
         run: |
           git clone "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY_OWNER}/taskforge-api.git" taskforge-api
           cd taskforge-api
-          npm ci
+          npm install
           npm run prisma:generate
           npx prisma migrate deploy
           npm run build
