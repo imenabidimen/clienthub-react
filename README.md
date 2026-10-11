@@ -1,38 +1,36 @@
 # ClientHub
 
-A React workspace for keeping track of client deliverables and their progress.
+ClientHub is a React-based deliverables checklist. It presents tasks as items to track through a delivery cycle and uses TaskForge for sign-in and persistence.
 
-ClientHub uses the same TaskForge API as WorkBoard, but the UI is built around a different use case: client/project delivery rather than a personal task list.
+The current API stores tasks, not separate client or project records. The project labels in the interface are presentation context; they are not a multi-client/project management model.
 
 ## Stack
 
-- React 18
-- TypeScript
+- React 18 and TypeScript
 - Vite
-- Vitest
-- Testing Library
+- Vitest and Testing Library
+- TaskForge API (NestJS, PostgreSQL)
 
-## What I built
+## Current features
 
-- Sign in and account creation
-- Authenticated client workspace
-- Client/project context
+- Account creation and sign-in
+- Authenticated workspace
 - Add and complete deliverables
-- Delivery progress and project metrics
+- Completion percentage and open/completed counts
 - Loading, empty and error states
 - Responsive layout
-- Bearer-token API integration
+- Bearer-token API integration and expired-session handling
 
 ## Run locally
 
-Start TaskForge API on `http://localhost:3000/api`, then:
+Start [TaskForge API](https://github.com/imenabidimen/taskforge-api) first, with its API available at `http://localhost:3000/api`. Then:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Tests and production build:
+Set `VITE_API_URL` if the API uses a different base URL (include `/api`).
 
 ```bash
 npm test
@@ -41,7 +39,7 @@ npm run build
 
 ## Screenshots
 
-These are browser captures from the application running against the API and PostgreSQL database in GitHub Actions.
+These are browser captures from the CI workflow, using a fresh test account against TaskForge and PostgreSQL.
 
 ### Sign in
 ![ClientHub sign in](docs/screenshots/01-sign-in.png)
@@ -55,6 +53,6 @@ These are browser captures from the application running against the API and Post
 ### Complete a deliverable
 ![ClientHub deliverable completed](docs/screenshots/04-deliverable-completed.png)
 
-## Why React?
+## Why this version uses React
 
-ClientHub is the React implementation of the workflow. WorkBoard implements the same backend contract in Vue.
+ClientHub uses the same small task API as WorkBoard but presents a different workflow and visual layout. This keeps the backend contract shared while the two frontends can be compared side by side.
