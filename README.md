@@ -2,10 +2,9 @@
 
 ![CI](https://github.com/imenabidimen/clienthub-react/actions/workflows/ci.yml/badge.svg)
 
-**Portfolio role:** a React 18 + TypeScript frontend for tracking deliverables. It consumes the shared [TaskForge API](https://github.com/imenabidimen/taskforge-api), keeping authentication and persistence in the backend.
+ClientHub is a React 18 + TypeScript interface for reviewing a list of work deliverables. Users can add an item, search by title, filter the list by status, and see how many items are complete. It uses the shared [TaskForge API](https://github.com/imenabidimen/taskforge-api) for sign-in and persistence.
 
-Related work: [WorkBoard (Vue)](https://github.com/imenabidimen/workboard-vue) demonstrates the same API contract from a Vue perspective. ClientHub currently stores tasks, not independent client/project entities; the UI presents a deliverables workflow without claiming a full CRM data model.
-
+[WorkBoard](https://github.com/imenabidimen/workboard-vue) uses the same API from Vue, but keeps its interface to the everyday task cycle: add a task and mark it complete. ClientHub puts more emphasis on finding and reviewing items in a list. Neither frontend has its own copy of the backend data.
 
 ## Stack
 
@@ -14,16 +13,16 @@ Related work: [WorkBoard (Vue)](https://github.com/imenabidimen/workboard-vue) d
 - Vitest and Testing Library
 - TaskForge API (NestJS, PostgreSQL)
 
-## Current features
+## What you can do
 
-- Account creation and sign-in
-- Authenticated workspace
+- Create an account and sign in
+- Open the authenticated workspace
 - Add and complete deliverables
-- Search by title and filter by open/completed status
-- Completion percentage and open/completed counts
-- Loading, empty and error states
-- Responsive layout
-- Bearer-token API integration and expired-session handling
+- Search by title and filter to open or completed items
+- Review completion percentage and open/completed counts
+- See loading, empty and API-error states
+- Handle an expired session
+- Send authenticated requests with a bearer token
 
 ## Run locally
 
@@ -43,7 +42,7 @@ npm run build
 
 ## Screenshots
 
-These are browser captures from the CI workflow, using a fresh test account against TaskForge and PostgreSQL.
+These browser captures come from the CI workflow using a fresh test account against TaskForge and PostgreSQL.
 
 ### Sign in
 ![ClientHub sign in](docs/screenshots/01-sign-in.png)
@@ -57,12 +56,6 @@ These are browser captures from the CI workflow, using a fresh test account agai
 ### Complete a deliverable
 ![ClientHub deliverable completed](docs/screenshots/04-deliverable-completed.png)
 
-## Why this version uses React
+## Scope
 
-ClientHub and WorkBoard deliberately share the TaskForge API, but focus on different day-to-day interactions. ClientHub adds a searchable delivery list with status filters and a progress summary; WorkBoard is the simpler personal task workflow. The API remains the source of truth for task data.
-
-## Scope and trade-offs
-
-ClientHub is a deliverables-oriented view over the shared TaskForge task model. Search and status filters help narrow the list, while the progress summary gives a quick view of completion. It does **not** model clients, projects, or independent deliverable entities in the database, so I do not describe it as a full CRM.
-
-Sharing the API with WorkBoard makes the comparison useful: the same authentication and persistence contract is consumed by React here and Vue in WorkBoard. The trade-off is that the underlying domain remains deliberately simple; the React frontend is the main point of comparison.
+The interface calls its items “deliverables”, but the API currently stores them using the shared task model. There are no separate client, project or deliverable tables. Search, status filtering and the progress summary are frontend features over that task data; this is a focused UI comparison, not a claim that the repository is a complete CRM.
