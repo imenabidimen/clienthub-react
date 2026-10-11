@@ -30,7 +30,7 @@ Related work: [WorkBoard (Vue)](https://github.com/imenabidimen/workboard-vue) d
 Start [TaskForge API](https://github.com/imenabidimen/taskforge-api) first, with its API available at `http://localhost:3000/api`. Then:
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
